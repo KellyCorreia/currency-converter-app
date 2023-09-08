@@ -9,6 +9,7 @@ import { DataService } from './currency-converter/data/data.service';
 import { ConverterTransactionService } from './currency-converter/database/converter-transaction.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConverterTransaction } from './currency-converter/database/converter-transaction.entity';
+import {ExternalConverterClient} from "./currency-converter/external-converter/external-converter.client";
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ConverterTransaction } from './currency-converter/database/converter-tr
     CurrencyConverterService,
     DataService,
     ConverterTransactionService,
+    ExternalConverterClient,
   ],
 })
 export class AppModule {}

@@ -1,64 +1,47 @@
 import { Injectable } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
-
-const CONVERTER_API_URL = 'https://api.apilayer.com/currency_data/convert';
-const CONVERTER_API_KEY = '8WOCtKQOQC63c2UD01gvdQBXZb1oZBmV';
+import {DataService} from "./data/data.service";
+import {ConverterTransactionService} from "./database/converter-transaction.service";
+import {ExternalConverterClient} from "./external-converter/external-converter.client";
+import {ConverterResponseClass} from "./converter-response.class";
+import {ExternalConverterResponseClass} from "./external-converter/external-converter-response.class";
+import {ConverterTransaction} from "./database/converter-transaction.entity";
 
 @Injectable()
 export class CurrencyConverterService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly converterClient: ExternalConverterClient,
+    private readonly dataService: DataService,
+    private readonly transactionService: ConverterTransactionService,
+) {}
 
   async convertCurrency(
+    userId: string,
     fromCurrency: string,
     toCurrency: string,
     amount: number,
   ): Promise<ConverterResponseClass> {
-    const url = CONVERTER_API_URL;
-    const headers = { apikey: CONVERTER_API_KEY };
-    const params = {
-      from: fromCurrency,
-      to: toCurrency,
-      amount: amount,
-      base: 'EUR',
-    };
-    const response = await firstValueFrom(
-      this.httpService.get(url, { headers, params }),
+
+    const conversionPromise = this.converterClient.convertCurrency(fromCurrency, toCurrency, amount);
+    const conversionResult: ExternalConverterResponseClass = await conversionPromise;
+
+    const storageResultPromise = this.transactionService.createTransaction(
+      userId,
+      conversionResult.query.from,
+      conversionResult.query.amount,
+      conversionResult.query.to,
+      conversionResult.info.quote,
     );
-    const responseData: ConverterResponseClass = response.data;
-    console.log(responseData);
-    return responseData;
-  }
-}
-
-export class ConverterResponseClass {
-  success: boolean;
-  query: QueryClass;
-  info: InfoClass;
-  result: number;
-  constructor(success, query, info, result) {
-    success = success;
-    query = query;
-    info = info;
-    result = result;
-  }
-}
-
-export class QueryClass {
-  from: string;
-  to: string;
-  amount: number;
-  constructor(from, to, amount) {
-    this.from = from;
-    this.to = to;
-    this.amount = amount;
-  }
-}
-export class InfoClass {
-  timestamp: number;
-  quote: number;
-  constructor(timestamp, quote) {
-    this.timestamp = timestamp;
-    this.quote = quote;
+    const storageResult: ConverterTransaction = await storageResultPromise;
+    const result = new ConverterResponseClass (
+      storageResult.id,
+      storageResult.userId,
+      storageResult.currencyFrom,
+      storageResult.amountFrom,
+      storageResult.currencyTo,
+      storageResult.amountFrom * storageResult.conversionIndex,
+      storageResult.conversionIndex,
+      storageResult.dateCreated,
+    )
+    return result;
   }
 }
