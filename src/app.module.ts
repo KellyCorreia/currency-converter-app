@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AppController } from './sample-files/app.controller';
+import { AppService } from './sample-files/app.service';
 import { CurrencyConverterService } from './currency-converter/currency-converter.service';
 import { CurrencyConverterController } from './currency-converter/currency-converter.controller';
 import { DatabaseModule } from './currency-converter/database/database.module';
