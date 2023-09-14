@@ -9,16 +9,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const axios_1 = require("@nestjs/axios");
-const app_controller_1 = require("./sample-files/app.controller");
-const app_service_1 = require("./sample-files/app.service");
-const currency_converter_service_1 = require("./currency-converter/currency-converter.service");
-const currency_converter_controller_1 = require("./currency-converter/currency-converter.controller");
-const database_module_1 = require("./currency-converter/database/database.module");
-const data_service_1 = require("./currency-converter/data/data.service");
-const converter_transaction_service_1 = require("./currency-converter/database/converter-transaction.service");
+const currency_converter_service_1 = require("./app/currency-converter.service");
+const currency_converter_controller_1 = require("./app/currency-converter.controller");
+const database_module_1 = require("./database/database.module");
+const data_service_1 = require("./data/data.service");
+const converter_transaction_service_1 = require("./database/converter-transaction.service");
 const typeorm_1 = require("@nestjs/typeorm");
-const converter_transaction_entity_1 = require("./currency-converter/database/converter-transaction.entity");
-const external_converter_client_1 = require("./currency-converter/external-converter/external-converter.client");
+const converter_transaction_entity_1 = require("./database/converter-transaction.entity");
+const external_converter_client_1 = require("./external-converter/external-converter.client");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
@@ -28,15 +26,14 @@ exports.AppModule = AppModule = __decorate([
             database_module_1.DatabaseModule,
             typeorm_1.TypeOrmModule.forRoot({
                 type: 'sqlite',
-                database: 'currency-converter-database.db',
+                database: 'app-database.db',
                 entities: [converter_transaction_entity_1.ConverterTransaction],
                 synchronize: true,
             }),
             typeorm_1.TypeOrmModule.forFeature([converter_transaction_entity_1.ConverterTransaction]),
         ],
-        controllers: [app_controller_1.AppController, currency_converter_controller_1.CurrencyConverterController],
+        controllers: [currency_converter_controller_1.CurrencyConverterController],
         providers: [
-            app_service_1.AppService,
             currency_converter_service_1.CurrencyConverterService,
             data_service_1.DataService,
             converter_transaction_service_1.ConverterTransactionService,
