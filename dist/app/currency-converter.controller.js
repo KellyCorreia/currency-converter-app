@@ -15,12 +15,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CurrencyConverterController = void 0;
 const common_1 = require("@nestjs/common");
 const currency_converter_service_1 = require("./currency-converter.service");
+const configuration_1 = require("../config/configuration");
 let CurrencyConverterController = exports.CurrencyConverterController = class CurrencyConverterController {
-    constructor(currencyConverterService) {
+    constructor(currencyConverterService, config) {
         this.currencyConverterService = currencyConverterService;
+        this.config = config;
     }
     async convertCurrencyTransaction(userId, fromCurrency, toCurrency, amount) {
-        return this.currencyConverterService.convertCurrency(userId, fromCurrency, toCurrency, amount);
+        return this.currencyConverterService.convertCurrency(this.config, userId, fromCurrency, toCurrency, amount);
     }
     async getConverterTransactionById(user) {
         return this.currencyConverterService.getTransactionsByUserId(user);
@@ -54,6 +56,7 @@ __decorate([
 ], CurrencyConverterController.prototype, "getAllConverterTransactions", null);
 exports.CurrencyConverterController = CurrencyConverterController = __decorate([
     (0, common_1.Controller)('currency-converter'),
-    __metadata("design:paramtypes", [currency_converter_service_1.CurrencyConverterService])
+    __metadata("design:paramtypes", [currency_converter_service_1.CurrencyConverterService,
+        configuration_1.Configuration])
 ], CurrencyConverterController);
 //# sourceMappingURL=currency-converter.controller.js.map

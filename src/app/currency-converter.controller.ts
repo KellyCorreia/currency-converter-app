@@ -1,11 +1,13 @@
 import { Controller, Get, Query, Headers, Param } from '@nestjs/common';
 import { CurrencyConverterService } from './currency-converter.service';
 import {TransactionClass} from "./transaction.class";
+import {Configuration} from "../config/configuration";
 
 @Controller('currency-converter')
 export class CurrencyConverterController {
   constructor(
-    private readonly currencyConverterService: CurrencyConverterService
+    private readonly currencyConverterService: CurrencyConverterService,
+    private readonly config: Configuration
   ) {}
 
   @Get('convert')
@@ -16,6 +18,7 @@ export class CurrencyConverterController {
     @Query('amount') amount: number,
   ): Promise<TransactionClass> {
     return this.currencyConverterService.convertCurrency(
+      this.config,
       userId,
       fromCurrency,
       toCurrency,

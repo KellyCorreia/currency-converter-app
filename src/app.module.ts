@@ -8,6 +8,7 @@ import { ConverterTransactionService } from './database/converter-transaction.se
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConverterTransaction } from './database/converter-transaction.entity';
 import {ExternalConverterClient} from "./external-converter/external-converter.client";
+import {Configuration} from "./config/configuration";
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import {ExternalConverterClient} from "./external-converter/external-converter.c
   ],
   controllers: [CurrencyConverterController],
   providers: [
+    Configuration,
     CurrencyConverterService,
     DataService,
     ConverterTransactionService,

@@ -9,11 +9,11 @@ export class ExternalConverterClient {
   constructor(private readonly httpService: HttpService) {}
 
   async convertCurrency(
+    config: Configuration,
     fromCurrency: string,
     toCurrency: string,
     amount: number,
   ): Promise<ExternalConverterResponseClass> {
-    const config = await new Configuration();
     const key = config.apikey
     const url = config.apiURL
     console.log(key)

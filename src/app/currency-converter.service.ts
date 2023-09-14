@@ -5,6 +5,7 @@ import {ExternalConverterClient} from "../external-converter/external-converter.
 import {ExternalConverterResponseClass} from "../external-converter/external-converter-response.class";
 import {ConverterTransaction} from "../database/converter-transaction.entity";
 import {TransactionClass} from "./transaction.class";
+import {Configuration} from "../config/configuration";
 
 @Injectable()
 export class CurrencyConverterService {
@@ -15,13 +16,14 @@ export class CurrencyConverterService {
 ) {}
 
   async convertCurrency(
+    config: Configuration,
     userId: string,
     fromCurrency: string,
     toCurrency: string,
     amount: number,
   ): Promise<TransactionClass> {
 
-    const conversionPromise = this.converterClient.convertCurrency(fromCurrency, toCurrency, amount);
+    const conversionPromise = this.converterClient.convertCurrency(config, fromCurrency, toCurrency, amount);
     const conversionResult: ExternalConverterResponseClass = await conversionPromise;
 
     const storageResultPromise = this.transactionService.createTransaction(
@@ -38,18 +40,16 @@ export class CurrencyConverterService {
   async getAllTransactions(): Promise<TransactionClass[]> {
     const resultPromise = this.transactionService.findAllTransactions()
     const dbTransactions: ConverterTransaction[] = await resultPromise;
-    const transactions = dbTransactions.map(item => {
+    return dbTransactions.map(item => {
       return item.toTransactionModel()
     })
-    return transactions
   }
 
   async getTransactionsByUserId(userId: string): Promise<TransactionClass[]> {
     const resultPromise = this.transactionService.getTransactionByUserId(userId)
     const dbTransactions: ConverterTransaction[] = await resultPromise;
-    const transactions = dbTransactions.map(item => {
+    return dbTransactions.map(item => {
       return item.toTransactionModel()
     })
-    return transactions
   }
 }

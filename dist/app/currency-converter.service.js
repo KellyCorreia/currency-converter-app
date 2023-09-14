@@ -20,8 +20,8 @@ let CurrencyConverterService = exports.CurrencyConverterService = class Currency
         this.dataService = dataService;
         this.transactionService = transactionService;
     }
-    async convertCurrency(userId, fromCurrency, toCurrency, amount) {
-        const conversionPromise = this.converterClient.convertCurrency(fromCurrency, toCurrency, amount);
+    async convertCurrency(config, userId, fromCurrency, toCurrency, amount) {
+        const conversionPromise = this.converterClient.convertCurrency(config, fromCurrency, toCurrency, amount);
         const conversionResult = await conversionPromise;
         const storageResultPromise = this.transactionService.createTransaction(userId, conversionResult.query.from, conversionResult.query.amount, conversionResult.query.to, conversionResult.info.quote);
         const storageResult = await storageResultPromise;

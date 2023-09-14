@@ -17,6 +17,7 @@ const converter_transaction_service_1 = require("./database/converter-transactio
 const typeorm_1 = require("@nestjs/typeorm");
 const converter_transaction_entity_1 = require("./database/converter-transaction.entity");
 const external_converter_client_1 = require("./external-converter/external-converter.client");
+const configuration_1 = require("./config/configuration");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
@@ -34,6 +35,7 @@ exports.AppModule = AppModule = __decorate([
         ],
         controllers: [currency_converter_controller_1.CurrencyConverterController],
         providers: [
+            configuration_1.Configuration,
             currency_converter_service_1.CurrencyConverterService,
             data_service_1.DataService,
             converter_transaction_service_1.ConverterTransactionService,

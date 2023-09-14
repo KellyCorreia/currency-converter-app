@@ -13,13 +13,11 @@ exports.ExternalConverterClient = void 0;
 const common_1 = require("@nestjs/common");
 const axios_1 = require("@nestjs/axios");
 const rxjs_1 = require("rxjs");
-const configuration_1 = require("../config/configuration");
 let ExternalConverterClient = exports.ExternalConverterClient = class ExternalConverterClient {
     constructor(httpService) {
         this.httpService = httpService;
     }
-    async convertCurrency(fromCurrency, toCurrency, amount) {
-        const config = await new configuration_1.Configuration();
+    async convertCurrency(config, fromCurrency, toCurrency, amount) {
         const key = config.apikey;
         const url = config.apiURL;
         console.log(key);
