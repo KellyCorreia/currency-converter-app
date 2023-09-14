@@ -30,18 +30,16 @@ let CurrencyConverterService = exports.CurrencyConverterService = class Currency
     async getAllTransactions() {
         const resultPromise = this.transactionService.findAllTransactions();
         const dbTransactions = await resultPromise;
-        const transactions = dbTransactions.map(item => {
+        return dbTransactions.map(item => {
             return item.toTransactionModel();
         });
-        return transactions;
     }
     async getTransactionsByUserId(userId) {
         const resultPromise = this.transactionService.getTransactionByUserId(userId);
         const dbTransactions = await resultPromise;
-        const transactions = dbTransactions.map(item => {
+        return dbTransactions.map(item => {
             return item.toTransactionModel();
         });
-        return transactions;
     }
 };
 exports.CurrencyConverterService = CurrencyConverterService = __decorate([

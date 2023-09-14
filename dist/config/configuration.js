@@ -17,7 +17,6 @@ class Configuration {
             });
             this.apikey = properties['converter.apikey'];
             this.apiURL = properties['converter.apiurl'];
-            console.log(`Apikey: ${this.apikey} | ApiURL: ${this.apiURL}`);
         });
     }
 }

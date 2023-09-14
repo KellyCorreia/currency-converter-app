@@ -16,8 +16,6 @@ export class ExternalConverterClient {
   ): Promise<ExternalConverterResponseClass> {
     const key = config.apikey
     const url = config.apiURL
-    console.log(key)
-    console.log(url)
     const headers = { apikey: key };
     const params = {
       from: fromCurrency,
